@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+DEPENDENCIES_INSTALLER_SCRIPT='./install_dependencies.sh'
+
+chmod +x $DEPENDENCIES_INSTALLER_SCRIPT
+
+source $DEPENDENCIES_INSTALLER_SCRIPT

@@ -19,8 +19,7 @@
 
 # Define functions for create, cancel, and view
 create_function () {
-    echo -e 'Creating the race...'
-    curl -X POST \
+    curl -sS -X POST \
         -H 'Content-Type: application/json' \
         -d '{ "origin": { "latitude": 40.7128, "longitude": -74.0060 }, "destiny": { "latitude": 34.0522, "longitude": -118.2437 }, "transaction": { "amount": 100, "timestamp": "2024-05-15 12:30:00" } }' \
         http://localhost:80/races
@@ -31,11 +30,31 @@ cancel_function () {
         echo "Please provide a UUID to cancel."
         exit 1
     fi
-    
-    curl -X POST \
+
+    curl -sS -X POST \
         -H 'Content-Type: application/json' \
         -d '{ "description": "Vou à pé", "reason": "Others" }' \
         http://localhost:80/races/"$2"/cancellation
+}
+
+auto_cancel_after_function () {
+    if [ -z "$2" ]; then
+        echo "Please provide a SECONDS_TO_SLEEP_IN_SECONDS before cancel the race"
+        exit 1
+    fi
+
+    echo -e 'Creating one race to be canceled...'
+    RACE_UUID=$(create_function | jq -r '.id')
+    echo -e "The created race has uuid $RACE_UUID"
+
+    echo -e "Waiting $2 seconds before cancel the race..."
+    sleep "$2s"
+    
+    echo -e "Cancelling the race with uuid $RACE_UUID..."
+    curl -sS -X POST \
+        -H 'Content-Type: application/json' \
+        -d '{ "description": "Vou à pé", "reason": "Others" }' \
+        "http://localhost:80/races/$RACE_UUID/cancellation"
 }
 
 view_function () {
@@ -44,7 +63,7 @@ view_function () {
         exit 1
     fi
 
-    curl -X GET \
+    curl -sS -X GET \
         -H 'Content-Type: application/json' \
         http://localhost:80/races/"$2"
 }
@@ -65,6 +84,9 @@ case "$1" in
         ;;
     "view")
         view_function "$@"
+        ;;
+    "auto_cancel_after")
+        auto_cancel_after_function "$@"
         ;;
     *)
         echo "Invalid option: $1. Please provide a valid option: create, cancel, or view"

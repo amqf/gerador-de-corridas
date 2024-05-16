@@ -11,7 +11,7 @@ final class RaceSQLiteRepository extends SQLiteRepository implements RaceReposit
 
     function __construct(string $dbFilePath = '')
     {
-        parent::__construct(!empty($dbFilePath) ? $dbFilePath : '../databases/database.db');
+        parent::__construct(!empty($dbFilePath) ? $dbFilePath : DATABASE_PATH);
     }
 
     public function save(AggregatedRace $aggregatedRace) : AggregatedRace

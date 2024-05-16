@@ -18,8 +18,6 @@ use Slim\Factory\AppFactory;
 use Slim\Routing\RouteRunner;
 use App\Domain\UseCases\CreateRace;
 
-define('DATABASE_PATH', './database/database.db');
-
 /** @var Injector */
 $diInjector = new Injector(
     new Config([

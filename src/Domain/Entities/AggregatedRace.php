@@ -156,12 +156,12 @@ final class AggregatedRace
         return $this->transaction instanceof Transaction;
     }
 
-    public function wasRequestedBefore3MinutesAgo() : bool
+    public function wasRequestedAfter3MinutesAgo() : bool
     {
         /** @var DateTimeImmutable $currentDateTime */
         $currentDateTime = new DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo'));
         $diffInSeconds = $currentDateTime->getTimestamp() - $this->getRequestedAt()->getTimestamp();
-        return $diffInSeconds < 180;
+        return $diffInSeconds > 180;
     }
 
     public function cancel(array $data) : void
@@ -169,10 +169,7 @@ final class AggregatedRace
         /** @var RaceCancellation $cancellation */
         $cancellation = RaceCancellation::create($data);
 
-        if(
-            $this->isCancelled()
-            && $this->wasRequestedBefore3MinutesAgo()
-            && $this->cancelledByReasonOthers()
+        if($this->isCancelled() || ($this->wasRequestedAfter3MinutesAgo() && $cancellation->matchReason(RaceCancellationReason::Others))
         )
         {
             throw new DomainException('Cannot cancel the race now');
@@ -181,17 +178,12 @@ final class AggregatedRace
         $this->cancellation = $cancellation;
     }
 
-    public function cancelledByReasonOthers() : bool
-    {
-        return $this->getCancellation()->matchReason(RaceCancellationReason::Others);
-    }
-
     public function isCancelled() : bool
     {
         return $this->cancellation instanceof RaceCancellation;
     }
 
-    public function getCancellation() : RaceCancellation
+    public function getCancellation() : ?RaceCancellation
     {
         return $this->cancellation;
     }
