@@ -1,0 +1,10 @@
+:8080 {
+	root * ./
+	file_server
+
+	php_fastcgi localhost:9001
+
+	log {
+		output file ./caddy.log
+	}
+}

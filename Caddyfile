@@ -1,0 +1,10 @@
+:80 {
+	root * /var/www/html
+	file_server
+
+	php_fastcgi unix//var/run/php/php-fpm.sock
+
+	log {
+		output file /var/www/html/caddy.log
+	}
+}
