@@ -1,3 +1,10 @@
+# SETUP
+
+```
+docker network create global_network
+docker exec app-races composer install
+```
+
 ```
 src
 ├── App

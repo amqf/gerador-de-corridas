@@ -22,7 +22,7 @@ create_function () {
     curl -X POST \
         -H 'Content-Type: application/json' \
         -d '{ "origin": { "latitude": 40.7128, "longitude": -74.0060 }, "destiny": { "latitude": 34.0522, "longitude": -118.2437 }, "transaction": { "amount": 100, "timestamp": "2024-05-15 12:30:00" } }' \
-        http://localhost:8080/races
+        http://localhost:80/races
 }
 
 cancel_function () {
@@ -34,7 +34,7 @@ cancel_function () {
     curl -X POST \
         -H 'Content-Type: application/json' \
         -d '{ "description": "Vou à pé", "reason": "Others" }' \
-        http://localhost:8080/races/"$2"/cancellation
+        http://localhost:80/races/"$2"/cancellation
 }
 
 view_function () {
@@ -45,7 +45,7 @@ view_function () {
 
     curl -X GET \
         -H 'Content-Type: application/json' \
-        http://localhost:8080/races/"$2"
+        http://localhost:80/races/"$2"
 }
 
 # Check if the first parameter is provided

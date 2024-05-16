@@ -1,11 +1,26 @@
-version: '3.8'
-
+version: "3.8"
+#
+# Services definitions
+#
 services:
   app:
-    build: .
+    container_name: app-races
+    image: kooldev/php:8.3-nginx
     ports:
-      - "80:80"
-    volumes:
-      - .:/var/www/html
+      - "${KOOL_APP_PORT:-80}:80"
     environment:
-      - APP_ENV=development
+      ASUSER: "${KOOL_ASUSER:-0}"
+      UID: "${UID:-0}"
+    volumes:
+      - .:/app:delegated
+    networks:
+      - local_network
+      - global_network
+#
+# Networks definitions
+#
+networks:
+  local_network:
+  global_network:
+    external: true
+    name: "${KOOL_GLOBAL_NETWORK:-global_network}"

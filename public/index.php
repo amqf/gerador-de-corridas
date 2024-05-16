@@ -1,6 +1,6 @@
 <?php
 
-require_once './vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 use App\Domain\UseCases\RegisterUser;
 use App\Infra\Persistence\SQLite\RaceSQLiteRepository;
