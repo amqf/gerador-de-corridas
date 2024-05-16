@@ -19,6 +19,7 @@
 
 # Define functions for create, cancel, and view
 create_function () {
+    echo -e 'Creating the race...'
     curl -X POST \
         -H 'Content-Type: application/json' \
         -d '{ "origin": { "latitude": 40.7128, "longitude": -74.0060 }, "destiny": { "latitude": 34.0522, "longitude": -118.2437 }, "transaction": { "amount": 100, "timestamp": "2024-05-15 12:30:00" } }' \

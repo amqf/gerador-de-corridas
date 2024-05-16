@@ -1,9 +1,21 @@
 # SETUP
 
+## With Docker
+
 ```
 docker network create global_network
 docker exec app-races composer install
 ```
+
+## Without Docker in Linux debian or derivated
+
+```
+- install php8.3
+- install composer
+- install curl
+- install php8.3-mbstring
+- install php8.3-sqlite3
+``` 
 
 ```
 src
