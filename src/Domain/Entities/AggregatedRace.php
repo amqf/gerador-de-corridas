@@ -4,7 +4,7 @@ namespace App\Domain\Entities;
 
 use App\Domain\Entities\ValueObjects\Id;
 use App\Domain\Entities\ValueObjects\GeoCoordinate;
-use App\Domain\Entities\ValueObjects\Transaction;
+use App\Domain\Entities\ValueObjects\Payment;
 use App\Domain\Entities\ValueObjects\RaceCancellation;
 use App\Domain\Entities\ValueObjects\Enums\RaceCancellationReason;
 use DateTimeImmutable;
@@ -14,7 +14,7 @@ use DomainException;
 final class AggregatedRace
 {
     private ?RaceCancellation $cancellation = null;
-    private ?Transaction $transaction = null;
+    private ?Payment $payment = null;
 
     private function __construct(
         private Id $id,
@@ -26,9 +26,9 @@ final class AggregatedRace
     {
     }
 
-    public function pay(Transaction $transaction) : void
+    public function pay(Payment $payment) : void
     {
-        $this->transaction = $transaction;
+        $this->payment = $payment;
     }
 
     /**
@@ -111,14 +111,14 @@ final class AggregatedRace
     /**
      * With this function is possible do pix or cash payment after create the race
      * 
-     * @param $transaction [
+     * @param $payment [
      *      'amount' => float,
      *      'timestamp' => DateTimeImmutable
      * ]
      */
-    public function setTransaction(array $transaction) : void
+    public function setPayment(array $payment) : void
     {
-        $this->transaction = Transaction::create($data['transaction']);
+        $this->payment = Payment::create($data['payment']);
     }
 
     public function getId() : Id|null
@@ -136,9 +136,9 @@ final class AggregatedRace
         return $this->destiny;
     }
 
-    public function getTransaction() : ?Transaction
+    public function getPayment() : ?Payment
     {
-        return $this->transaction;
+        return $this->payment;
     }
 
     public function getRequestedAt() : DateTimeImmutable
@@ -153,7 +153,7 @@ final class AggregatedRace
 
     public function isPaid() : bool
     {
-        return $this->transaction instanceof Transaction;
+        return $this->payment instanceof Payment;
     }
 
     public function wasRequestedAfter3MinutesAgo() : bool
@@ -194,7 +194,7 @@ final class AggregatedRace
             'id' => $this->getId()->__toString(),
             'origin' => $this->getOrigin()->toArray(),
             'destiny' => $this->getDestiny()->toArray(),
-            'transaction' => $this->getTransaction()?->toArray(),
+            'payment' => $this->getPayment()?->toArray(),
             'requested_at' => $this->getRequestedAt()->format('Y-m-d H:i:s'),
         ];
 

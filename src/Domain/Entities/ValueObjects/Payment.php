@@ -4,16 +4,16 @@ namespace App\Domain\Entities\ValueObjects;
 
 use DateTimeImmutable;
 
-final class Transaction
+final class Payment
 {
     private function __construct(
         private float $amount,
-        private TransactionTimestamp $timestamp
+        private PaymentTimestamp $timestamp
     )
     {
         if ($this->amount <= 0)
         {
-            throw new InvalidArgumentException("Transaction amount must be positive.");
+            throw new InvalidArgumentException("Payment amount must be positive.");
         }
     }
 
@@ -21,7 +21,7 @@ final class Transaction
     {
         return new self(
             $data['amount'],
-            $timestamp = TransactionTimestamp::create($data['timestamp'])
+            $timestamp = PaymentTimestamp::create($data['timestamp'])
         );
     }
 

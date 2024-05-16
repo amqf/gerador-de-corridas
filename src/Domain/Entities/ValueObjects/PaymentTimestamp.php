@@ -4,7 +4,7 @@ namespace App\Domain\Entities\ValueObjects;
 use DateTimeImmutable;
 use DateTimeZone;
 
-final class TransactionTimestamp
+final class PaymentTimestamp
 {
     private function __construct(
         private DateTimeImmutable|null $timestamp
