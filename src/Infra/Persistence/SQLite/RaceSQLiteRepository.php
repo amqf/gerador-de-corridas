@@ -18,7 +18,7 @@ final class RaceSQLiteRepository extends SQLiteRepository implements RaceReposit
     {
         if($aggregatedRace->notPersisted())
         {
-            return AggregatedRace::create($this->create($aggregatedRace->toArray()));
+            return AggregatedRace::make($this->create($aggregatedRace->toArray()));
         }
             
         if(!$this->update($aggregatedRace->getId(), $aggregatedRace->toArray()))
@@ -26,14 +26,14 @@ final class RaceSQLiteRepository extends SQLiteRepository implements RaceReposit
             throw new RuntimeException(sprintf('Cannot persist %s', $aggregatedRace->getId()));
         }
 
-        return AggregatedRace::create($this->findById($aggregatedRace->getId()));
+        return AggregatedRace::make($this->findById($aggregatedRace->getId()));
     }
 
     public function getById(string $id) : ?AggregatedRace
     {
         if($race = $this->findById($id))
         {
-            return AggregatedRace::create($race);
+            return AggregatedRace::make($race);
         }
 
         return null;

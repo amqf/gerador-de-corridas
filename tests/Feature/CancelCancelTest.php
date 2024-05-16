@@ -22,7 +22,7 @@ it('can cancel a race', function () {
 
     /** @var array $cancellation */
     $cancellation = [
-        'description' => 'Desisti',
+        'description' => 'withdrawal',
         'reason' => 'Others',
     ];
 
@@ -44,7 +44,7 @@ it('can cancel a race', function () {
 
     /** @var AggregatedRace */
     $createdRace = $createRaceUseCase->execute($race);
-    
+
     // Act
     $createdRace->cancel($cancellation);
     $cancelRaceUseCase->execute($createdRace->getId(), $createdRace->toArray());

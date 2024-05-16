@@ -19,11 +19,6 @@ class Id
         return new self(self::createUUID(), true);
     }
 
-    public function notPersisted() : bool
-    {
-        return $this->notPersisted;
-    }
-
     public static function fromString(string $value): self
     {
         static::ensureIsValidIdString($value);

@@ -31,10 +31,20 @@ class RaceCancellation
         static::ensureValidDescription($data['description']);
 
         return new self(
-            new DateTimeImmutable(null, new DateTimeZone('America/Sao_Paulo')),
+            new DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')),
             $data['description'],
             RaceCancellationReason::fromString($data['reason'])
         );
+    }
+
+    public function matchReason(RaceCancellationReason $reason) : bool
+    {
+        return $this->reason === $reason;
+    }
+
+    public function getCanceledAt() : DateTimeImmutable
+    {
+        return $this->canceledAt;
     }
 
     private static function ensureValidDescription(string $description)
