@@ -3,7 +3,6 @@
 namespace App\Presentation\Web\Controllers;
 
 use App\Domain\Entities\AggregatedRace;
-use App\Domain\Repositories\UserRepository;
 use App\Domain\UseCases\CancelRace;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

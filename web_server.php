@@ -1,13 +1,10 @@
 <?php
 
 
-use App\Domain\UseCases\RegisterUser;
 use App\Infra\Persistence\SQLite\RaceSQLiteRepository;
 use App\Presentation\Web\Controllers\CancelRaceController;
 use App\Presentation\Web\Controllers\CreateRaceController;
 use App\Presentation\Web\Controllers\HealthController;
-use App\Presentation\Web\Controllers\RegisterUserController;
-use App\Presentation\Web\Controllers\UserController;
 use App\Presentation\Web\Controllers\ViewRaceController;
 use App\Presentation\Web\Controllers\PaymentController;
 use App\Domain\Repositories\RaceRepository;
@@ -30,13 +27,6 @@ $diInjector = new Injector(
         //     RaceRepository::class => fn($di) => new RaceSQLiteRepository(DATABASE_PATH, 'races'),
         //     CreateRace::class => fn($di) => new CreateRace($di->get(RaceRepository::class)),
         // ],
-        'types' => [
-            RegisterUserController::class => [
-                'preferences' => [
-                    RegisterUser::class => RegisterUser::class,
-                ]
-            ]
-        ]
     ])
 );
 
@@ -99,8 +89,6 @@ $app->add(function (Request $request, $routeRunner) {
 });
 
 $app->get('/', handle_request_with(HealthController::class, $diInjector));
-$app->get('/users', handle_request_with(UserController::class, $diInjector));
-$app->post('/register', handle_request_with(RegisterUserController::class, $diInjector));
 $app->post('/races', handle_request_with(CreateRaceController::class, $diInjector));
 $app->post('/races/{id}/cancellation', handle_request_with(CancelRaceController::class, $diInjector));
 $app->get('/races/{id}', handle_request_with(ViewRaceController::class, $diInjector));
