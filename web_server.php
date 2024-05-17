@@ -9,6 +9,7 @@ use App\Presentation\Web\Controllers\HealthController;
 use App\Presentation\Web\Controllers\RegisterUserController;
 use App\Presentation\Web\Controllers\UserController;
 use App\Presentation\Web\Controllers\ViewRaceController;
+use App\Presentation\Web\Controllers\PaymentController;
 use App\Domain\Repositories\RaceRepository;
 use Laminas\Di\Config;
 use Laminas\Di\Injector;
@@ -68,6 +69,6 @@ $app->post('/register', handle_request_with(RegisterUserController::class, $diIn
 $app->post('/races', handle_request_with(CreateRaceController::class, $diInjector));
 $app->post('/races/{id}/cancellation', handle_request_with(CancelRaceController::class, $diInjector));
 $app->get('/races/{id}', handle_request_with(ViewRaceController::class, $diInjector));
-$app->get('/races/{id}/payment', handle_request_with(ViewRaceController::class, $diInjector));
+$app->post('/races/{id}/payment', handle_request_with(PaymentController::class, $diInjector));
 
 $app->run();

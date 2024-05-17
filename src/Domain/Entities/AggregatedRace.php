@@ -13,22 +13,26 @@ use DomainException;
 
 final class AggregatedRace
 {
-    private ?RaceCancellation $cancellation = null;
-    private ?Payment $payment = null;
-
     private function __construct(
         private Id $id,
         private GeoCoordinate $origin,
         private GeoCoordinate $destiny,
         private DateTimeImmutable $requestedAt,
-        private bool $isPersisted
+        private ?RaceCancellation $cancellation,
+        private ?Payment $payment,
+        private bool $isPersisted,
     )
     {
     }
 
-    public function pay(Payment $payment) : void
+    public function pay(array $data) : void
     {
-        $this->payment = $payment;
+        if($this->isCancelled())
+        {
+            throw new DomainException('Cannot pay a cancelled race');
+        }
+
+        $this->payment = Payment::create($data);
     }
 
     /**
@@ -56,6 +60,8 @@ final class AggregatedRace
             GeoCoordinate::create($data['origin']),
             GeoCoordinate::create($data['destiny']),
             $currentDateTime,
+            cancellation: null,
+            payment: null,
             isPersisted: false
         );
 
@@ -66,7 +72,8 @@ final class AggregatedRace
      * Make a aggregated race with data comming from database for example.
      * It's for case when the race was created before.
      * 
-     * This method require the race id and optionally cancellation data.
+     * This method require the race id,
+     * but cancellation and cancellation data are opationals.
      * 
      * @param array $data [
      *  'id' => uuid,
@@ -86,19 +93,25 @@ final class AggregatedRace
         /** @var DateTimeImmutable $requestedAt */
         $requestedAt = new DateTimeImmutable($data['requested_at'], new DateTimeZone('America/Sao_Paulo'));
 
+        /** @var ?RaceCancellation */
+        $cancellation = isset($data['cancellation']) ?
+            RaceCancellation::create($data['cancellation'])
+            : null;
+
+        $payment = isset($data['payment']) ?
+            Payment::make($data['payment'])
+            : null;
+
         /** @var AggregatedRace */
         $aggregatedRace = new self(
             Id::create($data['id']),
             GeoCoordinate::create($data['origin']),
             GeoCoordinate::create($data['destiny']),
             $requestedAt,
+            $cancellation,
+            $payment,
             isPersisted: true
         );
-
-        if(isset($data['cancellation']))
-        {
-            $aggregatedRace->cancel($data['cancellation']);
-        }
 
         return $aggregatedRace;
     }
@@ -106,19 +119,6 @@ final class AggregatedRace
     public function notPersisted() : bool
     {
         return !$this->isPersisted;
-    }
-
-    /**
-     * With this function is possible do pix or cash payment after create the race
-     * 
-     * @param $payment [
-     *      'amount' => float,
-     *      'timestamp' => DateTimeImmutable
-     * ]
-     */
-    public function setPayment(array $payment) : void
-    {
-        $this->payment = Payment::create($data['payment']);
     }
 
     public function getId() : Id|null

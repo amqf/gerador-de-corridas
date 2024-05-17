@@ -4,14 +4,14 @@ namespace App\Presentation\Web\Controllers;
 
 use App\Domain\Entities\AggregatedRace;
 use App\Domain\Repositories\UserRepository;
-use App\Domain\UseCases\ViewRace;
+use App\Domain\UseCases\PayRace;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-final class ViewRaceController implements Controller
+final class PaymentController implements Controller
 {
     public function __construct(
-        private ViewRace $viewRace
+        private PayRace $payRace
     )
     {
     }
@@ -19,7 +19,7 @@ final class ViewRaceController implements Controller
     public function handle(Request $request, Response $response, array $args = []) : Response
     {
         /** @var AggregatedRace */
-        $race = $this->viewRace->execute($args['id']);
+        $race = $this->payRace->execute($args['id'], $request->getParsedBody());
 
         $response->withHeader('Content-Type', 'application/json')
                 ->getBody()

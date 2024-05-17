@@ -17,11 +17,19 @@ final class Payment
         }
     }
 
-    public static function create(array $data)
+    public static function create(array $data) : self
     {
         return new self(
             $data['amount'],
             $timestamp = PaymentTimestamp::create($data['timestamp'])
+        );
+    }
+
+    public static function make(array $data) : self
+    {
+        return new self(
+            $data['amount'],
+            $timestamp = PaymentTimestamp::make($data['timestamp'])
         );
     }
 

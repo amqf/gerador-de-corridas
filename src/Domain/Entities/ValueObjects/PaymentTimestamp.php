@@ -12,7 +12,17 @@ final class PaymentTimestamp
     {
     }
 
-    public static function create(string|null $timestamp)
+    public static function create(DateTimeImmutable $timestamp) : self
+    {
+        if(is_string($timestamp))
+        {
+            return new self($timestamp);
+        }
+
+        return new self($timestamp);
+    }
+
+    public static function make(string $timestamp) : self
     {
         if(is_string($timestamp))
         {
