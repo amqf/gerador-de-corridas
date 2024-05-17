@@ -28,12 +28,19 @@ final class AggregatedRace
         $this->cost = $this->calcCost($origin, $destiny);
     }
 
+    /**
+     * @param array $data [
+     *  'amount' => float
+     * ]
+     */
     public function pay(array $data) : void
     {
         if($this->isCancelled())
         {
             throw new DomainException('Cannot pay a cancelled race');
         }
+
+        $data['timestamp'] = new DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo'));
 
         /** @var Payment $payment */
         $payment = Payment::create($data);

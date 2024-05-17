@@ -90,15 +90,19 @@ Quando se tenta pagar a corrida com um valor menor que o custo dela verá o erro
 
 ## About View a Race
 
+View the race by id.
+
 ```bash
 curl -sS -X GET \
     -H 'Content-Type: application/json' \
     http://localhost/races/{race_uuid}
 ```
 
+Quando o uuid não existe verá o erro:
+
 ```json
 {
-    "error": ""
+    "error": "Race not found with id %s"
 }
 ```
 

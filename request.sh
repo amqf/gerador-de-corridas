@@ -20,7 +20,7 @@
 create_function () {
     curl -sS -X POST \
         -H 'Content-Type: application/json' \
-        -d '{ "origin": { "latitude": -22.302407981128297, "longitude": -49.10229971613744 }, "destiny": { "latitude": -22.302715314470994, "longitude": -49.101353497779776 }, "transaction": { "amount": 100, "timestamp": "2024-05-15 12:30:00" } }' \
+        -d '{ "origin": { "latitude": -22.302407981128297, "longitude": -49.10229971613744 }, "destiny": { "latitude": -22.302715314470994, "longitude": -49.101353497779776 } }' \
         http://localhost:80/races
 }
 
@@ -49,7 +49,7 @@ pay_race_function () {
 
     curl -sS -X POST \
         -H 'Content-Type: application/json' \
-        -d '{ "amount": 1.0 }' \
+        -d '{ "amount": '$3' }' \
         http://localhost:80/races/"$2"/payment
 }
 

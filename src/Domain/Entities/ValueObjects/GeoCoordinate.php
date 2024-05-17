@@ -2,7 +2,7 @@
 
 namespace App\Domain\Entities\ValueObjects;
 
-use Domain\Common\Exceptions\InvalidGeoCoordinateException;
+use App\Domain\Entities\ValueObjects\Exceptions\InvalidGeoCoordinateException;
 use Geotools\Coordinate\Coordinate;
 use Geotools\Coordinate\CoordinateInterface;
 use Geotools\Distance\Distance;
