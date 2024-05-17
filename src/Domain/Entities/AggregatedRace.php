@@ -13,6 +13,8 @@ use DomainException;
 
 final class AggregatedRace
 {
+    private float $price;
+
     private function __construct(
         private Id $id,
         private GeoCoordinate $origin,
@@ -23,6 +25,7 @@ final class AggregatedRace
         private bool $isPersisted,
     )
     {
+        $this->price = $this->calcPrice($origin, $destiny);
     }
 
     public function pay(array $data) : void
@@ -33,6 +36,17 @@ final class AggregatedRace
         }
 
         $this->payment = Payment::create($data);
+    }
+
+    /**
+     * Apply the race price calculating distance between origin and destiny
+     * This actually sum 0.5 cents (in real) for each meter
+     */
+    private function calcPrice(GeoCoordinate $origin, GeoCoordinate $destiny) : float
+    {
+        /** @var float */
+        $meters = $origin->diffInMeters($destiny);
+        return $meters * 0.05;
     }
 
     /**
@@ -53,6 +67,9 @@ final class AggregatedRace
     {
         /** @var DateTimeImmutable $currentDateTime */
         $currentDateTime = new DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo'));
+
+
+        // var_dump($data['origin'], $data['destiny']);die();
 
         /** @var AggregatedRace */
         $aggregatedRace = new self(
@@ -188,10 +205,16 @@ final class AggregatedRace
         return $this->cancellation;
     }
 
+    public function getPrice() : float
+    {
+        return $this->price;
+    }
+
     public function toArray() : array
     {
         $data = [
             'id' => $this->getId()->__toString(),
+            'price' => $this->getPrice(),
             'origin' => $this->getOrigin()->toArray(),
             'destiny' => $this->getDestiny()->toArray(),
             'payment' => $this->getPayment()?->toArray(),

@@ -3,13 +3,20 @@
 namespace App\Domain\Entities\ValueObjects;
 
 use Domain\Common\Exceptions\InvalidGeoCoordinateException;
+use Geotools\Coordinate\Coordinate;
+use Geotools\Coordinate\CoordinateInterface;
+use Geotools\Distance\Distance;
+use Geotools\Geotools;
 
 class GeoCoordinate
 {
     private $latitude;
     private $longitude;
 
-    private function __construct(float $latitude, float $longitude)
+    private function __construct(
+        float $latitude,
+        float $longitude
+    )
     {
         $this->ensureIsValidLatitude($latitude);
         $this->ensureIsValidLongitude($longitude);
@@ -37,6 +44,33 @@ class GeoCoordinate
         return $this->longitude;
     }
 
+    public function diffInMeters(GeoCoordinate $geoCoordinate) : float
+    {
+        /** @var CoordinateInterface $origin */
+        $origin = new Coordinate([
+            $this->getLatitude(),
+            $this->getLongitude(),
+        ]);
+
+        /** @var CoordinateInterface $destiny */
+        $destiny = new Coordinate([
+            $geoCoordinate->getLatitude(),
+            $geoCoordinate->getLongitude(),
+        ]);
+
+        /** @var Geotools $geotools */
+        $geotools = new Geotools();
+
+        // var_dump($origin);die();
+        $distanceInMeters = $geotools
+            ->from($origin)
+            ->to($destiny)
+            ->distance()
+            ->flat();
+
+        return $distanceInMeters;
+    }
+
     public function equals(GeoCoordinate $other): bool
     {
         return $this->latitude === $other->latitude && $this->longitude === $other->longitude;
@@ -46,7 +80,7 @@ class GeoCoordinate
     {
         return [
             'latitude' => $this->latitude,
-            'longitude' => $this->latitude,
+            'longitude' => $this->longitude,
         ];
     }
 

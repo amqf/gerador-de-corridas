@@ -16,12 +16,11 @@
 #     ],
 # ]
 
-
 # Define functions for create, cancel, and view
 create_function () {
     curl -sS -X POST \
         -H 'Content-Type: application/json' \
-        -d '{ "origin": { "latitude": 40.7128, "longitude": -74.0060 }, "destiny": { "latitude": 34.0522, "longitude": -118.2437 }, "transaction": { "amount": 100, "timestamp": "2024-05-15 12:30:00" } }' \
+        -d '{ "origin": { "latitude": -22.302407981128297, "longitude": -49.10229971613744 }, "destiny": { "latitude": -22.302715314470994, "longitude": -49.101353497779776 }, "transaction": { "amount": 100, "timestamp": "2024-05-15 12:30:00" } }' \
         http://localhost:80/races
 }
 
