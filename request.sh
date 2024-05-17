@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
 
-# [
-#     'id' => '550e8400-e29b-41d4-a716-446655440000',
-#     'origin' => [
-#         'latitude' => 40.7128,
-#         'longitude' => -74.0060,
-#     ],
-#     'destiny' => [
-#         'latitude' => 34.0522,
-#         'longitude' => -118.2437,
-#     ],
-#     'transaction' => [
-#         'amount' => 100,
-#         'timestamp' => '2024-05-15 12:30:00',
-#     ],
-# ]
+# Exibe a mensagem de ajuda
+display_help() {
+    echo "Usage: $0 [options]"
+    echo "Options:"
+    echo "  --create                        Create a new race"
+    echo "  --cancel <UUID>                 Cancel a race with the specified UUID"
+    echo "  --view <UUID>                   View details of a race with the specified UUID"
+    echo "  --auto_cancel_after <SECONDS>   Create a race and automatically cancel it after the specified time"
+    echo "  --pay <UUID> <VALUE>            Pay for a race with the specified UUID and amount in reals"
+    echo "  --help                          Display this help message"
+}
+
+# Verifica se o primeiro parâmetro é fornecido
+if [ "$1" == "--help" ]; then
+    display_help
+    exit 0
+fi
 
 # Define functions for create, cancel, and view
 create_function () {
@@ -92,19 +94,19 @@ fi
 
 # Use a case statement to determine which function to call
 case "$1" in
-    "create")
+    "--create")
         create_function
         ;;
-    "cancel")
+    "--cancel")
         cancel_function "$@"
         ;;
-    "view")
+    "--view")
         view_function "$@"
         ;;
-    "auto_cancel_after")
+    "--auto_cancel_after")
         auto_cancel_after_function "$@"
         ;;
-    "pay_race")
+    "--pay")
         pay_race_function "$@"
         ;;
     *)

@@ -106,28 +106,18 @@ Quando o uuid não existe verá o erro:
 }
 ```
 
-# How run it?
+# Setup
 
-## With Docker
+## Setup with Docker
 
-```
+```bash
 $ docker network create global_network
 $ docker compose up --build -d
-$ docker exec app-races composer install
+$ docker exec app-races composer install # after run that, you can run project, or tests as the below command suggest
+$ docker exec app-races composer run test
 ```
 
-## With Kool.Dev
-
-Read more about in https://kool.dev/
-
-```
-$ curl -fsSL https://kool.dev/install | bash
-$ kool start
-$ kool run composer install
-# TODO: complete with more info here
-```
-
-## Without Docker in Linux or MacOS
+## Setup without Docker in Linux or MacOS
 
 **!!! ATTENTION !!!: Perform it your own risk.**
 
@@ -137,7 +127,7 @@ It can identify if you're using MacOS or Linux and run the appropriated command.
 
 ### Manually
 
-You can mannually all these dependencies:
+You can mannually install all these dependencies:
 
 ```
 - install php8.3
@@ -157,4 +147,25 @@ This dependencies is needed each one for a particular case.
 - php8.3-sqlite3 (required for run project / for presistence purpouse)
 - php8.3-mbstring (required for run project tests / for "pest test suite" purpouse)
 - jq (if you want use auto_cancel_after command in request.sh script)
+```
+
+# How run it?
+
+## Postman
+
+You can use Postman to perform requests, just importing `./postman/postman_collection.json` and `./postman/local.postman_environment.json`.
+
+## Bash script
+
+You can use `request.sh` bash script too.
+
+```bash
+$ Usage: ./request.sh [options]
+Options:
+  --create                        Create a new race
+  --cancel <UUID>                 Cancel a race with the specified UUID
+  --view <UUID>                   View details of a race with the specified UUID
+  --auto_cancel_after <SECONDS>   Create a race and automatically cancel it after the specified time
+  --pay <UUID> <VALUE>            Pay for a race with the specified UUID and amount in reals
+  --help                          Display this help message
 ```
