@@ -2,8 +2,8 @@
 
 namespace App\Domain\Entities\ValueObjects\Exceptions;
 
-use Exception;
+use DomainException;
 
-final class InvalidId extends Exception
+final class InvalidId extends DomainException
 {
 }

@@ -2,8 +2,8 @@
 
 namespace App\Domain\Entities\ValueObjects\Exceptions;
 
-use Exception;
+use DomainException;
 
-final class InvalidCredentialsException extends Exception
+final class InvalidCredentialsException extends DomainException
 {
 }

@@ -36,6 +36,23 @@ cancel_function () {
         http://localhost:80/races/"$2"/cancellation
 }
 
+pay_race_function () {
+    if [ -z "$2" ]; then
+        echo "Please provide a race UUID to pay."
+        exit 1
+    fi
+
+    if [ -z "$3" ]; then
+        echo "Please provide a value in reals"
+        exit 1
+    fi
+
+    curl -sS -X POST \
+        -H 'Content-Type: application/json' \
+        -d '{ "amount": 1.0 }' \
+        http://localhost:80/races/"$2"/payment
+}
+
 auto_cancel_after_function () {
     if [ -z "$2" ]; then
         echo "Please provide a SECONDS_TO_SLEEP_IN_SECONDS before cancel the race"
@@ -86,6 +103,9 @@ case "$1" in
         ;;
     "auto_cancel_after")
         auto_cancel_after_function "$@"
+        ;;
+    "pay_race")
+        pay_race_function "$@"
         ;;
     *)
         echo "Invalid option: $1. Please provide a valid option: create, cancel, or view"

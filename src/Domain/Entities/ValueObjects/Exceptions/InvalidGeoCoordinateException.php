@@ -1,9 +1,9 @@
 <?php
 
-namespace Domain\Common\Exceptions;
+namespace App\Domain\Entities\ValueObjects\Exceptions;
 
-use Exception;
+use DomainException;
 
-class InvalidGeoCoordinateException extends Exception
+class InvalidGeoCoordinateException extends DomainException
 {
 }

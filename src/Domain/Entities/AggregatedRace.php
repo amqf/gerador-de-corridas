@@ -13,7 +13,7 @@ use DomainException;
 
 final class AggregatedRace
 {
-    private float $price;
+    private float $cost;
 
     private function __construct(
         private Id $id,
@@ -25,7 +25,7 @@ final class AggregatedRace
         private bool $isPersisted,
     )
     {
-        $this->price = $this->calcPrice($origin, $destiny);
+        $this->cost = $this->calcCost($origin, $destiny);
     }
 
     public function pay(array $data) : void
@@ -35,14 +35,28 @@ final class AggregatedRace
             throw new DomainException('Cannot pay a cancelled race');
         }
 
-        $this->payment = Payment::create($data);
+        /** @var Payment $payment */
+        $payment = Payment::create($data);
+
+        if($payment->getAmount() < $this->getCost())
+        {
+            throw new DomainException(
+                sprintf(
+                    "You cannot pay with R$ %d. The race cost is R$ %d", 
+                    $payment->getAmount(),
+                    $this->getCost()
+                )
+            );
+        }
+
+        $this->payment = $payment;
     }
 
     /**
-     * Apply the race price calculating distance between origin and destiny
+     * Apply the race cost calculating distance between origin and destiny
      * This actually sum 0.5 cents (in real) for each meter
      */
-    private function calcPrice(GeoCoordinate $origin, GeoCoordinate $destiny) : float
+    private function calcCost(GeoCoordinate $origin, GeoCoordinate $destiny) : float
     {
         /** @var float */
         $meters = $origin->diffInMeters($destiny);
@@ -205,16 +219,16 @@ final class AggregatedRace
         return $this->cancellation;
     }
 
-    public function getPrice() : float
+    public function getCost() : float
     {
-        return $this->price;
+        return $this->cost;
     }
 
     public function toArray() : array
     {
         $data = [
             'id' => $this->getId()->__toString(),
-            'price' => $this->getPrice(),
+            'cost' => $this->getCost(),
             'origin' => $this->getOrigin()->toArray(),
             'destiny' => $this->getDestiny()->toArray(),
             'payment' => $this->getPayment()?->toArray(),

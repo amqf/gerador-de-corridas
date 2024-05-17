@@ -18,6 +18,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteRunner;
 use App\Domain\UseCases\CreateRace;
+use Laminas\Diactoros\ServerRequest;
 
 /** @var Injector */
 $diInjector = new Injector(
@@ -48,7 +49,41 @@ function handle_request_with(string $controller, Injector $diInjector): callable
 
 $app = AppFactory::create();
 
-$app->add(function (Request $request, RouteRunner $routeRunner) {
+// Define Custom Error Handler
+$customErrorHandler = function (
+    ServerRequest $request,
+    Throwable $exception,
+    bool $displayErrorDetails,
+    bool $logErrors,
+    bool $logErrorDetails,
+    ?LoggerInterface $logger = null
+) use ($app) {    
+    
+    #TODO: in this case, use $logger too
+    $payload = [
+        'error' => 'Oops! Não estávamos esperando por este erro, não é mesmo?',
+    ];
+
+    if($exception instanceof DomainException)
+    {
+        $payload = [
+            'error' => $exception->getMessage(),
+        ];
+    }
+
+    $response = $app->getResponseFactory()->createResponse();
+    $response->getBody()->write(
+        json_encode($payload, JSON_UNESCAPED_UNICODE)
+    );
+
+    return $response;
+};
+
+// Add Error Middleware
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
+
+$app->add(function (Request $request, $routeRunner) {
     // Decode request body json content
     // TODO: Isolate it in another middlware
     $rawBody = $request->getBody()->getContents();
