@@ -10,6 +10,10 @@ The race cost: 5 cents by meter
 
 Para a arquitetura do projeto foram utilizados alguns conceitos de Clean Architecture, isolamento da camada de persistência [em `Infra`] e camada de apresentação (`Presentation`), e centralização das regras de negócio [em `Domain`] no domínio com design conceituado no DDD como agregado, entidade, por exemplo.
 
+- Inversion Of Control: `laminas/laminas-di`, `laminas/laminas-servicemanager`, `laminas/laminas-diactoros`
+- Routing/Request/Response: `slim/slim`, `laminas/laminas-diactoros`
+- Request Validation: `rakit/validation`
+
 ## About Create a Race
 
 Exemplo de curl executar esta ação:
