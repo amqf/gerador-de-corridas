@@ -8,7 +8,7 @@ Features:
 
 The race cost: 5 cents by meter
 
-Para a arquitetura do projeto foram utilizados alguns conceitos de Clean Architecture, isolamento da camada de persistência e camada de apresentação, bem como a centralização das regras de negócio no domínio com design conceituado no DDD como agregado, entidade, por exemplo.
+Para a arquitetura do projeto foram utilizados alguns conceitos de Clean Architecture, isolamento da camada de persistência [em `Infra`] e camada de apresentação (`Presentation`), e centralização das regras de negócio [em `Domain`] no domínio com design conceituado no DDD como agregado, entidade, por exemplo.
 
 ## About Create a Race
 
